@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.conf import settings  # Import settings to reference AUTH_USER_MODEL
 from django.utils import timezone
 
 class Voter(AbstractUser):
@@ -12,28 +11,26 @@ class Voter(AbstractUser):
 
 class Election(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    description = models.TextField(blank=True, null=True)  # Added description field
+    start_date = models.DateField()
+    end_date = models.DateField()
 
     def __str__(self):
         return self.name
 
 class Candidate(models.Model):
-    election = models.ForeignKey(Election, on_delete=models.CASCADE, related_name="candidates")
+    election = models.ForeignKey(Election, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    party = models.CharField(max_length=255, blank=True, null=True)  # Added party field
 
     def __str__(self):
         return f"{self.name} - {self.election.name}"
 
 class Vote(models.Model):
-    voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
+    voter = models.ForeignKey("Voter", on_delete=models.CASCADE)
+    election = models.ForeignKey(Election, on_delete=models.CASCADE, default=1)  # Set default election ID
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    election = models.ForeignKey(Election, on_delete=models.CASCADE, null=True, blank=True)  # Allow null for now
     timestamp = models.DateTimeField(default=timezone.now)
-
-
-    class Meta:
-        unique_together = ('voter', 'election')  # Ensures one vote per election per voter
 
     def __str__(self):
         return f"{self.voter.username} voted for {self.candidate.name} in {self.election.name}"
