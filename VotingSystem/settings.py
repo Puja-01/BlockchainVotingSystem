@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+<<<<<<< HEAD
 from datetime import timedelta
+=======
+>>>>>>> feature-blockchain
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-8vs_y)2t)esw3ts5(#&xr!ll37ee%xt)s3_%^3nb*^&eb35jo2'
+=======
+SECRET_KEY = 'django-insecure-xx1$0nuyb&i72^08^8egctxo%oc7gd#lec$wp(d@kq4q8m%#q='
+>>>>>>> feature-blockchain
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,11 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'rest_framework',
     'voting',
     'rest_framework_simplejwt',
 
 
+=======
+    
+>>>>>>> feature-blockchain
 ]
 
 MIDDLEWARE = [

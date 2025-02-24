@@ -34,3 +34,6 @@ class Vote(models.Model):
 
     def __str__(self):
         return f"{self.voter.username} voted for {self.candidate.name} in {self.election.name}"
+from django.db import models
+
+# Create your models here.
