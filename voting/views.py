@@ -7,6 +7,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from .models import Voter, Election, Candidate, Vote
 from .serializers import VoterSerializer, ElectionSerializer, CandidateSerializer, VoteSerializer
+from django.shortcuts import render
+from web3 import Web3
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 # ✅ Voter Registration
 @api_view(['POST'])
@@ -111,11 +115,7 @@ class VoteCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(voter=self.request.user)
-from django.shortcuts import render
-from web3 import Web3
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+
 
 # ✅ Step 1: Connect to the local blockchain (Ganache)
 web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))

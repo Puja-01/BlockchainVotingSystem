@@ -3,7 +3,7 @@ from .views import (
     register_voter, login_voter, logout_voter,
     ElectionCreateView, ElectionListView, ElectionRetrieveView, ElectionUpdateView, ElectionDeleteView,
     CandidateCreateView, CandidateListView, CandidateRetrieveView, CandidateUpdateView, CandidateDeleteView,
-    VoteCreateView
+    VoteCreateView, cast_vote,get_votes,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -30,9 +30,8 @@ urlpatterns = [
 
     # ✅ Voting Endpoints
     path('vote/', VoteCreateView.as_view(), name='vote-create'),
-from .views import cast_vote, get_votes  # Import the views handling blockchain API
-
-urlpatterns = [
     path("vote/", cast_vote, name="cast_vote"),      # API to cast a vote
     path("get-votes/", get_votes, name="get_votes"),  # API to fetch votes
+
+    
 ]
