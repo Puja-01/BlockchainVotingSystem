@@ -3,7 +3,7 @@ from .views import (
     register_voter, login_voter, logout_voter,
     ElectionCreateView, ElectionListView, ElectionRetrieveView, ElectionUpdateView, ElectionDeleteView,
     CandidateCreateView, CandidateListView, CandidateRetrieveView, CandidateUpdateView, CandidateDeleteView,
-    VoteCreateView, cast_vote,get_votes,
+    VoteCreateView, cast_vote,get_votes,voter_details,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -30,8 +30,8 @@ urlpatterns = [
 
     # ✅ Voting Endpoints
     path('vote/', VoteCreateView.as_view(), name='vote-create'),
-    path("vote/", cast_vote, name="cast_vote"),      # API to cast a vote
+    path("cast-vote/", cast_vote, name="cast_vote"),      # API to cast a vote
     path("get-votes/", get_votes, name="get_votes"),  # API to fetch votes
-
+    path('voter-details/', voter_details, name='voter-details')
     
 ]

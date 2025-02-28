@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse
@@ -11,6 +11,8 @@ from django.shortcuts import render
 from web3 import Web3
 import json
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.exceptions import TokenError
 
 # ✅ Voter Registration
 @api_view(['POST'])
@@ -53,11 +55,21 @@ def login_voter(request):
 def logout_voter(request):
     try:
         refresh_token = request.data.get('refresh')
+
+        if not refresh_token:
+            return Response({"error": "Refresh token is required"}, status=400)
+
+        # Validate and blacklist the refresh token
         token = RefreshToken(refresh_token)
         token.blacklist()
+
         return Response({"message": "Logout successful"}, status=200)
-    except Exception as e:
+    except TokenError:
         return Response({"error": "Invalid token"}, status=400)
+    except Exception as e:
+        # Log or print exception for debugging
+        print(str(e))
+        return Response({"error": "An error occurred during logout"}, status=500)
 
 # ✅ CRUD Operations for Elections
 class ElectionCreateView(generics.CreateAPIView):
@@ -118,7 +130,7 @@ class VoteCreateView(generics.CreateAPIView):
 
 
 # ✅ Step 1: Connect to the local blockchain (Ganache)
-web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
+web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 
 # Check if the connection is successful
 if not web3.is_connected():
@@ -189,3 +201,14 @@ def get_votes(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def voter_details(request):
+    try:
+        voter = Voter.objects.get(user=request.user)
+    except Voter.DoesNotExist:
+        return Response({"error": "Voter not found"}, status=404)
+    
+    serializer = VoterSerializer(voter)
+    return Response(serializer.data)

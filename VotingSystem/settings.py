@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'voting',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 
 
     
@@ -133,3 +134,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'voting.Voter'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+)
